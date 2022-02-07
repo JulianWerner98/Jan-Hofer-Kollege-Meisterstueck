@@ -98,7 +98,7 @@ void beschZuInterrupt()
 ISR(TIMER1_COMPA_vect)
 {
   //Status LED, Kann einfach auskommentiert werden
-  if (!(count++ % 100))
+  if (!(count++ % (124990/OCR1A)))
   {
     digitalWrite(LED_NANO, !digitalRead(LED_NANO));
   }
