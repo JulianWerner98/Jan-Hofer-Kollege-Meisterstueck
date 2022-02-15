@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#define STD_TIMER 640 //Schnellste Geschwindigkeit
+#define STD_TIMER 640       //Schnellste Geschwindigkeit
 #define REDUCED_TIMER 12800 //Langsamste Geschwindigkeit
-#define VERLAMSARMUNG 1 //Wie schnell bremsen. Hohe Zahl = schnell bremsen
+#define VERLAMSARMUNG 1     //Wie schnell bremsen. Hohe Zahl = schnell bremsen
 #define STEP_PIN 6
 #define DIR_PIN 7    //DIR -Direction
 #define ENABLE_PIN 8 //ENA-Enable
@@ -13,7 +13,7 @@
 #define TASTER_BESCHLEUNIGUNG_AUF 2 //MUSS 2 ODER 3 SEIN
 #define TASTER_BESCHLEUNIGUNG_ZU 3  //MUSS 2 ODER 3 SEIN
 #define DIR_SCHLIESSEN 0            //Ändern wenn der Motor in die falsche Richtung fährt
-#define MOTOR_DREHT false //Wenn Enable den Zustand hat ist er aktiv am fahren 
+#define MOTOR_DREHT false           //Wenn Enable den Zustand hat ist er aktiv am fahren
 
 void beschAufInterrupt();
 void beschZuInterrupt();
@@ -44,14 +44,14 @@ void setup()
   //Setzte Timer 1 Einstellungen
   cli(); //Lösche globales Interrupt-Enable-Bit
   //CTC-Mode aktivieren
-  TCCR1A = 0;                          //Löschen des TCCR1A-Registers
-  TCCR1B = 0;                          //Löschen des TCCR1B-Registers
-  TCCR1B |= (1 << WGM12);              //Setze CTC-Mode (Waveform Generation Mode)
-  TCCR1B |= /*(1 << CS11) | */(1 << CS10); //Setze CS10 und CS11 (Clock Select), Vorteiler 1
-  TCNT1 = 0;                           //Timer Counter Register löschen
-  OCR1A = STD_TIMER;                   //Vergleichswert 1249->200Hz, 12499-> 20Hz
-  TIMSK1 |= (1 << OCIE1A);             //Bit Output Compare A Match Interrupt Enable setzen
-  sei();                               //Setze globales Interrupt-Enable-Bit
+  TCCR1A = 0;                               //Löschen des TCCR1A-Registers
+  TCCR1B = 0;                               //Löschen des TCCR1B-Registers
+  TCCR1B |= (1 << WGM12);                   //Setze CTC-Mode (Waveform Generation Mode)
+  TCCR1B |= /*(1 << CS11) | */ (1 << CS10); //Setze CS10 und CS11 (Clock Select), Vorteiler 1
+  TCNT1 = 0;                                //Timer Counter Register löschen
+  OCR1A = STD_TIMER;                        //Vergleichswert 1249->200Hz, 12499-> 20Hz
+  TIMSK1 |= (1 << OCIE1A);                  //Bit Output Compare A Match Interrupt Enable setzen
+  sei();                                    //Setze globales Interrupt-Enable-Bit
 
   //Setze Interrupt Einstellungen für Pin 2 & 3
   attachInterrupt(digitalPinToInterrupt(TASTER_BESCHLEUNIGUNG_AUF), beschAufInterrupt, FALLING);
@@ -99,7 +99,7 @@ void beschZuInterrupt()
 ISR(TIMER1_COMPA_vect)
 {
   //Status LED, Kann einfach auskommentiert werden
-  if (!(count++ % (1249900/OCR1A)))
+  if (!(count++ % (1249900 / OCR1A)))
   {
     digitalWrite(LED_NANO, !digitalRead(LED_NANO));
   }
@@ -143,10 +143,11 @@ ISR(TIMER1_COMPA_vect)
       }
       else
       {
-        if(OCR1A != REDUCED_TIMER){
+        if (OCR1A != REDUCED_TIMER)
+        {
           Serial.println("Minial Geschwindigkeit");
           OCR1A = REDUCED_TIMER;
-        } 
+        }
       }
     }
     else
