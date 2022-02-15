@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#define STD_TIMER 1249 //Schnellste Geschwindigkeit
-#define REDUCED_TIMER 12499 //Langsamste Geschwindigkeit
-#define VERLAMSARMUNG 400 //Wie schnell bremsen. Hohe Zahl = schnell bremsen
+#define STD_TIMER 640 //Schnellste Geschwindigkeit
+#define REDUCED_TIMER 12800 //Langsamste Geschwindigkeit
+#define VERLAMSARMUNG 1 //Wie schnell bremsen. Hohe Zahl = schnell bremsen
 #define STEP_PIN 6
 #define DIR_PIN 7    //DIR -Direction
 #define ENABLE_PIN 8 //ENA-Enable
@@ -46,7 +46,7 @@ void setup()
   TCCR1A = 0;                          //Löschen des TCCR1A-Registers
   TCCR1B = 0;                          //Löschen des TCCR1B-Registers
   TCCR1B |= (1 << WGM12);              //Setze CTC-Mode (Waveform Generation Mode)
-  TCCR1B |= (1 << CS11) | (1 << CS10); //Setze CS10 und CS11 (Clock Select), Vorteiler 64
+  TCCR1B |= /*(1 << CS11) | */(1 << CS10); //Setze CS10 und CS11 (Clock Select), Vorteiler 64
   TCNT1 = 0;                           //Timer Counter Register löschen
   OCR1A = STD_TIMER;                   //Vergleichswert 1249->200Hz, 12499-> 20Hz
   TIMSK1 |= (1 << OCIE1A);             //Bit Output Compare A Match Interrupt Enable setzen
