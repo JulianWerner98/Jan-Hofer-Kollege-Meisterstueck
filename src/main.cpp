@@ -102,7 +102,6 @@ ISR(TIMER1_COMPA_vect)
 
   if (digitalRead(TASTER_NOTAUS))
   {
-
     //Anschlag berührt
     if (!digitalRead(TASTER_ANSCHLAG_AUF) || !digitalRead(TASTER_ANSCHLAG_ZU))
     {
@@ -147,12 +146,5 @@ ISR(TIMER1_COMPA_vect)
         OCR1A = STD_TIMER;
       }
     }
-  }
-  else
-  {
-    digitalWrite(ENABLE_PIN, MOTOR_DREHT);
-    faehrtAuf = false;
-    faehrtZu = false;
-    slowMode = false;
   }
 }
