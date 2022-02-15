@@ -13,6 +13,7 @@
 #define TASTER_BESCHLEUNIGUNG_AUF 2 //MUSS 2 ODER 3 SEIN
 #define TASTER_BESCHLEUNIGUNG_ZU 3  //MUSS 2 ODER 3 SEIN
 #define DIR_SCHLIESSEN 0            //Ändern wenn der Motor in die falsche Richtung fährt
+#define MOTOR_DREHT false //Wenn Enable den Zustand hat ist er aktiv am fahren 
 
 void beschAufInterrupt();
 void beschZuInterrupt();
@@ -98,7 +99,7 @@ void beschZuInterrupt()
 ISR(TIMER1_COMPA_vect)
 {
   //Status LED, Kann einfach auskommentiert werden
-  if (!(count++ % (124990/OCR1A)))
+  if (!(count++ % (1249900/OCR1A)))
   {
     digitalWrite(LED_NANO, !digitalRead(LED_NANO));
   }
@@ -106,9 +107,9 @@ ISR(TIMER1_COMPA_vect)
   //Anschlag berührt
   if (!digitalRead(TASTER_ANSCHLAG_AUF) || !digitalRead(TASTER_ANSCHLAG_ZU))
   {
-    if (digitalRead(ENABLE_PIN))
+    if (digitalRead(ENABLE_PIN) == MOTOR_DREHT)
       Serial.println("Stoppe Motor");
-    digitalWrite(ENABLE_PIN, false);
+    digitalWrite(ENABLE_PIN, !MOTOR_DREHT);
     faehrtAuf = false;
     faehrtZu = false;
     slowMode = false;
@@ -121,14 +122,14 @@ ISR(TIMER1_COMPA_vect)
     if (faehrtAuf)
     {
       digitalWrite(DIR_PIN, !DIR_SCHLIESSEN);
-      digitalWrite(ENABLE_PIN, true);
+      digitalWrite(ENABLE_PIN, MOTOR_DREHT);
       digitalWrite(STEP_PIN, !digitalRead(STEP_PIN));
       //Status LED
       digitalWrite(LED_AUF, 1);
     }
     else if (faehrtZu)
     {
-      digitalWrite(ENABLE_PIN, true);
+      digitalWrite(ENABLE_PIN, MOTOR_DREHT);
       digitalWrite(STEP_PIN, !digitalRead(STEP_PIN));
       digitalWrite(DIR_PIN, DIR_SCHLIESSEN);
       //Status LED
